@@ -1,57 +1,53 @@
-#  Black Friday Sales Prediction
+# Black Friday Sales Prediction
 
-##  Description
+This repository contains an exploratory Jupyter notebook for predicting `Purchase` from customer and product fields using decision-tree and random-forest regressors. The notebook is an educational example, not a production-ready prediction service.
 
-I am delighted to present my latest Data Science project: **Black Friday Sales Prediction**.
+## Data
 
-The aim of this project is to **predict the purchase amount** of customers during Black Friday sales events.  
-The journey begins with an **exhaustive Exploratory Data Analysis (EDA)** to understand the impact of key features such as:
+The dataset is **not included** in this repository. The notebook expects a CSV named `Black Friday Dataset.csv` in the repository root, or a different path supplied through the `BLACK_FRIDAY_DATA` environment variable. The expected input is the Black Friday sales CSV with the columns used by the notebook, including `Purchase`, `Gender`, `Age`, `Occupation`, `City_Category`, `Stay_In_Current_City_Years`, `Marital_Status`, and `Product_Category_1` through `Product_Category_3` (plus `User_ID` and `Product_ID`, which the notebook drops before modeling).
 
-- Gender  
-- Age  
-- Occupation  
-- City Category  
-- Stay in Current City Years  
-- Marital Status  
-- Product Category  
+No dataset download URL or redistribution permission has been verified for this repository. Obtain the data from a source you are authorized to use, review its terms, and do not commit it unless redistribution is permitted. The saved notebook output has been cleared, so it does not provide data or reproducible results.
 
-on customer purchase behavior.
+## Setup and run
 
- The project uses **advanced data encoding techniques**, including:
+Use Python 3.9 or newer in a virtual environment. From the repository root:
 
-- **Label Encoding**  
-- **One-Hot Encoding**  
+```bash
+python -m venv .venv
+# Linux/macOS
+source .venv/bin/activate
+# Windows PowerShell: .venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
 
-to transform categorical variables into numerical formats suitable for machine learning models.
+Place the CSV at `Black Friday Dataset.csv` in the repository root, then run:
 
-To maintain data integrity and quality, **missing values are handled using imputation techniques**, ensuring data completeness for reliable analysis and modeling.
+```bash
+jupyter notebook "Black Friday Sales Prediction.ipynb"
+```
 
----
+To use another location, set `BLACK_FRIDAY_DATA` before launching Jupyter. For example, on Linux/macOS:
 
-##  Model Building
+```bash
+BLACK_FRIDAY_DATA=/path/to/Black\ Friday\ Dataset.csv jupyter notebook "Black Friday Sales Prediction.ipynb"
+```
 
-This project applies two powerful machine learning algorithms:
+On Windows PowerShell:
 
-- **Decision Tree Regressor**  
-- **Random Forest Regressor**  
+```powershell
+$env:BLACK_FRIDAY_DATA = "C:\path\to\Black Friday Dataset.csv"
+jupyter notebook "Black Friday Sales Prediction.ipynb"
+```
 
-These models are trained on the preprocessed dataset to accurately predict purchase amounts based on customer and product-related features.
+Run cells in order after confirming the CSV has the expected columns. If the file is absent, the first data-loading cell reports how to provide it.
 
----
+## What the notebook currently does
 
-##  Tools and Technologies
+The notebook explores the data, drops `User_ID` and `Product_ID`, applies `LabelEncoder` independently to object-typed columns, creates dummy columns for `Stay_In_Current_City_Years`, fills missing values in `Product_Category_2` and `Product_Category_3` with zero, and fits decision-tree and random-forest regressors using a random row-level train/test split. This is the notebook's current workflow, not a claim that this is the best encoding, missing-value strategy, or validation design. In particular, label-encoding nominal categories imposes integer codes, and the row split does not test generalization to unseen users or products.
 
-- Python  
-- Pandas, NumPy  
-- Seaborn, Matplotlib  
-- Scikit-learn  
-- Jupyter Notebook  
+The notebook reports only R² in its original analysis and does not establish performance beyond its particular split. There are no saved metrics in the cleaned notebook. **No model training or performance result has been independently reproduced for this repository update**; results must not be inferred from this README.
 
----
+## Dependencies
 
-##  Future Improvements
-
-- Hyperparameter tuning using GridSearchCV or RandomizedSearchCV  
-- Adding additional product or customer demographic features  
-- Comparing model performance using Cross-Validation  
-- Model deployment using Streamlit or Flask  
+Direct package versions are pinned in [`requirements.txt`](requirements.txt) to make environment setup more repeatable. The dataset itself remains an external prerequisite.
