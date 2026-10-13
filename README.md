@@ -1,57 +1,51 @@
-#  Black Friday Sales Prediction
+# Black Friday Sales Prediction
 
-##  Description
+A reproducible scikit-learn baseline for predicting the `Purchase` amount in the Black Friday dataset.
 
-I am delighted to present my latest Data Science project: **Black Friday Sales Prediction**.
+## What is included
 
-The aim of this project is to **predict the purchase amount** of customers during Black Friday sales events.  
-The journey begins with an **exhaustive Exploratory Data Analysis (EDA)** to understand the impact of key features such as:
+- `Black Friday Sales Prediction.ipynb`: leakage-aware exploratory checks, grouped holdout evaluation, and Decision Tree/Random Forest baselines.
+- `requirements.txt`: runtime dependencies.
+- `tests/test_static_validation.py`: dependency-light checks for notebook structure and portability.
+- `ENGINEERING_REVIEW.md`: engineering audit and validation record.
 
-- Gender  
-- Age  
-- Occupation  
-- City Category  
-- Stay in Current City Years  
-- Marital Status  
-- Product Category  
+## Data setup
 
-on customer purchase behavior.
+The dataset is **not committed** to this repository. Download the Kaggle Black Friday dataset separately and either:
 
- The project uses **advanced data encoding techniques**, including:
+1. place the file at `data/Black Friday Dataset.csv`, or
+2. set `BLACK_FRIDAY_DATA` to the CSV path before opening/running the notebook.
 
-- **Label Encoding**  
-- **One-Hot Encoding**  
+Example:
 
-to transform categorical variables into numerical formats suitable for machine learning models.
+```bash
+python -m venv .venv
+. .venv/bin/activate
+python -m pip install -r requirements.txt
+export BLACK_FRIDAY_DATA=/path/to/Black\ Friday\ Dataset.csv
+jupyter notebook "Black Friday Sales Prediction.ipynb"
+```
 
-To maintain data integrity and quality, **missing values are handled using imputation techniques**, ensuring data completeness for reliable analysis and modeling.
+If the file is missing, the first configuration cell raises a clear `FileNotFoundError` with the checked path. No model run or score is claimed without the data.
 
----
+## Methodology
 
-##  Model Building
+- `Purchase` is the regression target.
+- `User_ID` and `Product_ID` are excluded as identifiers.
+- `GroupShuffleSplit` keeps customers out of both train and test partitions, reducing customer-level leakage from repeated rows.
+- Imputation and one-hot encoding are fitted inside a scikit-learn `Pipeline` on training data only.
+- Metrics are **MAE**, **RMSE**, and **R²**. Optional grouped three-fold cross-validation is disabled by default because it can be expensive on the full dataset.
+- All random operations use seed `42`.
 
-This project applies two powerful machine learning algorithms:
+The repository intentionally does not contain generated predictions, cached outputs, or fabricated benchmark scores. See `ENGINEERING_REVIEW.md` for the audit details and the limitations of the available validation.
 
-- **Decision Tree Regressor**  
-- **Random Forest Regressor**  
+## Static validation
 
-These models are trained on the preprocessed dataset to accurately predict purchase amounts based on customer and product-related features.
+Run the repository checks without the dataset:
 
----
+```bash
+python -m unittest discover -s tests -v
+ruff check tests
+```
 
-##  Tools and Technologies
-
-- Python  
-- Pandas, NumPy  
-- Seaborn, Matplotlib  
-- Scikit-learn  
-- Jupyter Notebook  
-
----
-
-##  Future Improvements
-
-- Hyperparameter tuning using GridSearchCV or RandomizedSearchCV  
-- Adding additional product or customer demographic features  
-- Comparing model performance using Cross-Validation  
-- Model deployment using Streamlit or Flask  
+A full notebook execution requires the dataset and the packages in `requirements.txt`.
