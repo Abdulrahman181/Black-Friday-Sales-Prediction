@@ -26,7 +26,7 @@ export BLACK_FRIDAY_DATA=/path/to/Black\ Friday\ Dataset.csv
 jupyter notebook "Black Friday Sales Prediction.ipynb"
 ```
 
-If the file is missing, the first configuration cell raises a clear `FileNotFoundError` with the checked path. No model run or score is claimed without the data.
+If the file is missing, the first configuration cell raises a clear `FileNotFoundError` with the checked path. The notebook also rejects empty/duplicate-column data, invalid or non-finite targets, missing customer groups, insufficient groups for a split, unsupported feature dtypes, and empty partitions before fitting. No model run or score is claimed without the data.
 
 ## Methodology
 
@@ -41,7 +41,7 @@ The repository intentionally does not contain generated predictions, cached outp
 
 ## Static validation
 
-Run the repository checks without the dataset:
+Run the repository checks without the dataset (the tests include notebook schema, leakage, cleanliness, and edge-case guard checks):
 
 ```bash
 python -m unittest discover -s tests -v

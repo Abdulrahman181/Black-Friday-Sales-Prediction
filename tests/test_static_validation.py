@@ -47,6 +47,20 @@ class RepositoryStaticValidation(unittest.TestCase):
         self.assertIn('features.drop(columns=["Product_ID"])', self.code)
         self.assertNotIn("LabelEncoder", self.code)
 
+    def test_input_and_split_guards_present(self):
+        for token in (
+            "df.columns.is_unique",
+            "df.empty",
+            "Purchase contains missing values",
+            "np.isfinite",
+            "User_ID contains missing values",
+            "At least two distinct User_ID groups",
+            "X_train.empty or X_test.empty",
+            "Unsupported feature dtypes",
+            "RUN_CV=True requires at least three distinct User_ID groups",
+        ):
+            self.assertIn(token, self.code)
+
     def test_supporting_files_exist(self):
         for name in ("README.md", "requirements.txt", ".gitignore"):
             self.assertTrue((REPO / name).is_file(), name)
